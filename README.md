@@ -32,7 +32,7 @@ This repository reproduces the CMS HGCAL L1 Stage2 reconstruction chain in Pytho
 # Installation
 
     # setup conda environment
-    create -n <EnvName> python=3 pandas uproot pytables h5py
+    conda create -n <EnvName> python=3 pandas uproot pytables h5py
     conda activate <EnvName>
     
     # setup a ssh key if not yet done and clone the repository
@@ -105,9 +105,11 @@ The `PU0` files above were merged and are stored under `/data_CMS/cms/alves/L1HG
 
 The reconstruction chain is implemented in Python. To run it:
 
-    python bye_splits/run_chain.py
+    python bye_splits/run_default_chain.py
 
 where one can use the `-h` flag to visualize available options. To use the steps separately in your own script use the functions defined under `bye_splits/tasks/`, just as done in the `iterative_optimization.py` script.
+
+For specifying the lxplus username (in case it is different from the llr username), one can use the `--user <username>` flag.
 
 For plotting results as a function of the optimization trigger cell parameter:
 
