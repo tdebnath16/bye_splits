@@ -67,7 +67,8 @@ def merge_cluster_data_with_event(df_event_tc, cluster_data, index):
     
     return merged_data
 
-def run_radii_chain(pars, particles, pu, coefs, event=None):
+def run_radii_chain(pars, particles, pu, coefs, event=None): 
+    breakpoint()
     df_gen, df_cl, df_tc = get_data_reco_chain_start(nevents=30, reprocess=False, particles=particles, pu=pu, event=event)
 
     # Default chain
@@ -116,4 +117,7 @@ if __name__ == "__main__":
     assert (FLAGS.sel in ("splits_only", "no_splits", "all") or
             FLAGS.sel.startswith("above_eta_"))
 
-    run_radii_chain(common.dot_dict(vars(FLAGS)), particles=FLAGS.particles, PU=FLAGS.PU, coefs=FLAGS.coefs, event=FLAGS.event)
+    dict_event, df_gen = run_radii_chain(common.dot_dict(vars(FLAGS)), particles=FLAGS.particles, pu=FLAGS.PU, coefs=FLAGS.coefs, event=FLAGS.event)
+
+    # Store the data using pandas or any other suitable method
+    dict_event.to_csv('dict_event.csv')

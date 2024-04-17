@@ -125,15 +125,41 @@ def cluster(pars, in_seeds, in_tc, out_valid, out_plot, **kw):
             m = "The event number was not extracted!"
             raise ValueError(m)
 
-        cl3d["event"] = event_number.group(1)
+        event_id = event_number.group(1)
+        cl3d["event"] = event_id
         cl3d_cols = ["en", "pt", "x", "y", "z", "Rz", "eta", "phi"]
         sout[key] = cl3d[cl3d_cols]
         if tck == tckeys[0] and seedk == skeys[0]:
             dfout = cl3d[cl3d_cols + ["event"]]
         else:
             dfout = pd.concat((dfout, cl3d[cl3d_cols + ["event"]]), axis=0)
+        df["event"] = event_id
+        df_tc.append(df[['event','seed_idx', 'tc_wu', 'tc_wv', 'tc_cu', 'tc_cv', 'tc_layer', 'tc_energy','seed_energy']])
+    # Concatenate all dataframes in df_tc to combine trigger cell information
+    tc_all = pd.concat(df_tc)
+    cluster_count_per_event = df.groupby('event')['seed_idx'].nunique()
+    cluster_count_per_event
+    breakpoint()
 
-        df_tc.append(df[['seed_idx', 'tc_wu', 'tc_wv', 'tc_cu', 'tc_cv', 'tc_layer']])
+    '''# Plotting the histogram
+    plt.figure(figsize=(10, 6))
+    plt.hist(cluster_count_per_event, bins=30, alpha=0.7, color='blue', edgecolor='black')
+    plt.title('Histogram of Number of Clusters per Event')
+    plt.xlabel('Number of Clusters')
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.show()'''
+    # Group trigger cell information by 'seed_idx' (cluster ID) and aggregate 'tc_layer' information
+    df_tcell_layers = tc_all.groupby(['event']).agg({'seed_energy': 'first',
+                                                     'tc_layer': list,
+                                                     'tc_energy': list,
+                                                     'tc_wu': list, 
+                                                     'tc_wv': list, 
+                                                     'tc_cu': list, 
+                                                     'tc_cv': list}).reset_index()
+    # Rename columns for clarity
+    df_tcell_layers.columns = ['Event_ID', 'Seed_Energy', 'TC_Layers', 'TC_Energy', 'TC_wu', 'TC_wv', 'TC_cu', 'TC_cv']
+    df_tcell_layers.to_hdf('Event_to_tc.h5', key='data', mode='w')
     print("[clustering step] There were {} events without seeds.".format(empty_seeds))
 
     splot = pd.HDFStore(out_plot, mode='w')
@@ -188,6 +214,6 @@ if __name__ == "__main__":
 
     cluster_d = params.read_task_params("cluster")
     if FLAGS.coarse_seeding:
-        cluster_CS(vars(FLAGS), **cluster_d)
+        cluster_cs(vars(FLAGS), **cluster_d)
     else:
         cluster_default(vars(FLAGS), **cluster_d)

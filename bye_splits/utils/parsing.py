@@ -47,7 +47,7 @@ def add_parameters(parser):
     )
     parser.add_argument(
         "--nevents",
-        default=100,
+        default=10000,
         type=int,
         help="Number of events.",
     )
@@ -101,7 +101,7 @@ def parser_radii_chain():
     parser = common_arguments('Full reconstruction default chain varing radii')
     parser.add_argument("--coefs",     action="store",      help="choose the radii",          default=[0.006,0.010,0.014,0.018,0.022,0.026,0.030])
     parser.add_argument("--particles", action="store",      help="choose the particles type", default='photons')
-    parser.add_argument("--PU",        action="store",      help="choose the PU",             default='PU0')
+    parser.add_argument("--PU",        action="store",      help="choose the PU",             default='0')
     parser.add_argument("--event",     action="store",      help="choose the event",          default=None)
     parser.add_argument("--no_fill",   action="store_true", help='do not run the filling step')
     parser.add_argument("--no_smooth", action="store_true", help='do not run the smoothing step')

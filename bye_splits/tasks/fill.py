@@ -60,7 +60,7 @@ def fill(pars, df_gen, df_cl, df_tc, **kw):
             if ev_3d.empty or ev_tc.empty:
                 continue
             
-            keep_tc = ['tc_phi_bin', 'Rz_bin', 'tc_layer', 'tc_mipPt', 'tc_pt',
+            keep_tc = ['tc_phi_bin', 'Rz_bin', 'tc_layer', 'tc_energy', 'tc_mipPt', 'tc_pt',
                        'tc_wu', 'tc_wv', 'tc_cu',  'tc_cv', 'tc_x', 'tc_y', 'tc_z',
                        'tc_eta', 'tc_phi', 'gen_eta', 'gen_phi']
             ev_tc = ev_tc.filter(items=keep_tc)
@@ -102,7 +102,7 @@ def fill(pars, df_gen, df_cl, df_tc, **kw):
             store[store_str].attrs['columns'] = cols_keep
             store[store_str].attrs['doc'] = 'R/z vs. Phi histo Info'
 
-            cols_keep = ['Rz_bin', 'tc_phi_bin', 'tc_layer', 'tc_mipPt', 
+            cols_keep = ['Rz_bin', 'tc_phi_bin', 'tc_layer', 'tc_energy', 'tc_mipPt', 
                          'tc_pt', 'tc_wu', 'tc_wv', 'tc_cu',  'tc_cv',
                          'tc_x',  'tc_y',  'tc_z',  'tc_eta', 'tc_phi'] 
             ev_tc = ev_tc[cols_keep]
